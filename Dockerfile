@@ -1,11 +1,15 @@
+# syntax=docker/dockerfile:experimental
 FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /workspace/app
-COPY . .
-RUN ./gradlew build
 
+COPY . /workspace/app
+RUN --mount=type=cache,target=/root/.gradle ./gradlew clean build
+RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*-SNAPSHOT.jar)
 
 FROM eclipse-temurin:17-jdk-alpine
-COPY --from=build /workspace/app/build /build
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+VOLUME /tmp
+ARG DEPENDENCY=/workspace/app/build/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*","space.teymurov.authenticationauthorizationservice.AuthenticationAuthorizationServiceApplicationKt"]
