@@ -21,13 +21,9 @@ class JwtTokenUtil(
 
     fun generateAccessToken(userAuth: UserAuthResponse): String {
         return Jwts.builder()
-            .setSubject(userAuth.email)
-            .setIssuer("@fsp")
-            .claim("roles", userAuth.roles.joinToString())
             .claim("user-uuid", userAuth.userID)
             .claim("token-uuid", userAuth.tokenID)
-            .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + JWT_TOKEN_EXPIRED))
+            .claim("type", userAuth.type)
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact()
     }

@@ -53,11 +53,12 @@ class JwtTokenFilter(
         val subject = claims[Claims.SUBJECT] as String
         val userID = UUID.fromString(claims["user-uuid"] as String)
         val tokenID = UUID.fromString(claims["token-uuid"] as String)
+        val type = claims["type"] as String
 
         val textRoles = claims["roles"] as String
         val roles = textRoles.split(",")
 
-        return UserAuthResponse(email = subject, userID = userID,  roles = roles, tokenID = tokenID)
+        return UserAuthResponse(email = subject, userID = userID,  roles = roles, tokenID = tokenID, type = type)
     }
 
     private fun getAccessToken(request: HttpServletRequest): String {

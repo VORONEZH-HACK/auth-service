@@ -54,7 +54,8 @@ data class User(
             email = this.email,
             password = this.password,
             roles = this.roles.map { it.name },
-            userID = this.id
+            userID = this.id,
+            type = "USER"
         )
     }
 }

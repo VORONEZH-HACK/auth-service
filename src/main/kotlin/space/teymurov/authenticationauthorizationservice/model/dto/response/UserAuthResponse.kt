@@ -9,6 +9,7 @@ data class UserAuthResponse(
     val email: String,
     var userID: UUID,
     var tokenID: UUID? = null,
+    var type: String,
     private val password: String? = "",
     val roles: List<String> = listOf()
 ): UserDetails {

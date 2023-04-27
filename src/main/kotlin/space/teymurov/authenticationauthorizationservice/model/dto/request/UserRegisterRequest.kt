@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank
 import org.hibernate.validator.constraints.Length
 import space.teymurov.authenticationauthorizationservice.model.entity.User
 
-data class RegisterRequest(
+data class UserRegisterRequest(
     @field:NotBlank
     @field:Length(min = 2, max = 50)
     val name: String,
@@ -24,11 +24,11 @@ data class RegisterRequest(
 
     @field:NotBlank
     @field:Email
-    @field:Length(min = 3, max = 20)
+    @field:Length(min = 3, max = 1000)
     val email: String,
 
     @field:NotBlank
-    @field:Length(min = 5, max = 10)
+    @field:Length(min = 5, max = 1000)
     val password: String
 ){
     fun toUser(): User {

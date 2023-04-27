@@ -4,8 +4,8 @@ import jakarta.annotation.security.RolesAllowed
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import space.teymurov.authenticationauthorizationservice.model.dto.request.GrantedRequest
-import space.teymurov.authenticationauthorizationservice.model.dto.request.LoginRequest
-import space.teymurov.authenticationauthorizationservice.model.dto.request.RegisterRequest
+import space.teymurov.authenticationauthorizationservice.model.dto.request.UserLoginRequest
+import space.teymurov.authenticationauthorizationservice.model.dto.request.UserRegisterRequest
 import space.teymurov.authenticationauthorizationservice.model.dto.response.*
 import space.teymurov.authenticationauthorizationservice.service.UserService
 import space.teymurov.authenticationauthorizationservice.util.Constant.ROLE_ADMIN
@@ -18,24 +18,24 @@ class UserController(
     val userService: UserService
 ) {
     @PostMapping(
-        value = ["register"],
+        value = ["user/register"],
         produces = ["application/json"],
         consumes = ["application/json"]
     )
-    fun register(@RequestBody registerRequest: RegisterRequest): AbstractApiResponse<RegisterLoginResponse>{
+    fun register(@RequestBody registerRequest: UserRegisterRequest): AbstractApiResponse<RegisterLoginResponse>{
         return userService.register(registerRequest = registerRequest)
     }
 
-    @PostMapping(
-        value = ["login"],
+    @PatchMapping(
+        value = ["user/login"],
         produces = ["application/json"],
         consumes = ["application/json"]
     )
-    fun login(@RequestBody loginRequest: LoginRequest): AbstractApiResponse<RegisterLoginResponse>{
+    fun login(@RequestBody loginRequest: UserLoginRequest): AbstractApiResponse<RegisterLoginResponse>{
         return userService.login(loginRequest = loginRequest)
     }
 
-    @PostMapping(
+    @PatchMapping(
         value = ["logout"],
         produces = ["application/json"],
         consumes = ["application/json"]
@@ -54,7 +54,7 @@ class UserController(
     }
 
     @GetMapping(
-        value = ["me"],
+        value = ["user/me"],
         produces = ["application/json"]
     )
     @RolesAllowed(ROLE_USER, ROLE_ADMIN)
@@ -72,10 +72,8 @@ class UserController(
         return userService.getAllUser()
     }
 
-
-
     @PostMapping(
-        value = ["grant"],
+        value = ["user/grant"],
         produces = ["application/json"],
         consumes = ["application/json"]
     )
@@ -85,7 +83,7 @@ class UserController(
     }
 
     @PostMapping(
-        value = ["ungrant"],
+        value = ["user/ungrant"],
         produces = ["application/json"],
         consumes = ["application/json"]
     )

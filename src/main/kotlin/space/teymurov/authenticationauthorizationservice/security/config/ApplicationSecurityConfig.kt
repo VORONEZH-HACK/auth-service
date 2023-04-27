@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.HttpStatusEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import space.teymurov.authenticationauthorizationservice.model.repository.OrganizationRepository
 import space.teymurov.authenticationauthorizationservice.model.repository.UserRepository
 import space.teymurov.authenticationauthorizationservice.security.jwt.JwtTokenFilter
 
@@ -24,6 +25,7 @@ import space.teymurov.authenticationauthorizationservice.security.jwt.JwtTokenFi
 @EnableMethodSecurity(prePostEnabled = false, securedEnabled = false, jsr250Enabled = true)
 class ApplicationSecurityConfig(
     val userRepository: UserRepository,
+    val organizationRepository: OrganizationRepository,
     val jwtTokenFilter: JwtTokenFilter
 ) {
 
@@ -44,7 +46,7 @@ class ApplicationSecurityConfig(
     @Throws(Exception::class)
     fun configure(
         http: HttpSecurity
-    ): SecurityFilterChain{
+    ): SecurityFilterChain {
         http.csrf().disable()
         http.sessionManagement().sessionCreationPolicy(STATELESS)
         http.authorizeHttpRequests().requestMatchers("/api/v1/register", "/api/v1/login").permitAll()
@@ -57,9 +59,13 @@ class ApplicationSecurityConfig(
     @Bean
     fun userDetailsService(): UserDetailsService {
         return UserDetailsService {
+            val organization = organizationRepository.findByEmail(email = it)
             val user = userRepository.findByEmail(email = it)
-
-            return@UserDetailsService user?.toUserAuth() ?: throw UsernameNotFoundException("User email $it not found!")
+            if (user == null)
+                return@UserDetailsService organization?.toUserAuth()
+                    ?: throw UsernameNotFoundException("Organization email $it not found!")
+            else
+                return@UserDetailsService user.toUserAuth() ?: throw UsernameNotFoundException("User email $it not found!")
         }
     }
 }

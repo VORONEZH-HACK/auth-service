@@ -9,7 +9,6 @@ import space.teymurov.authenticationauthorizationservice.model.entity.User
 import space.teymurov.authenticationauthorizationservice.model.repository.RoleRepository
 import space.teymurov.authenticationauthorizationservice.model.repository.UserRepository
 import space.teymurov.authenticationauthorizationservice.util.Constant.ROLE_ADMIN
-import space.teymurov.authenticationauthorizationservice.util.Constant.ROLE_ORGANIZATION
 import space.teymurov.authenticationauthorizationservice.util.Constant.ROLE_USER
 
 @Component
@@ -27,11 +26,6 @@ class UserRoleSeeder(
         val roleUser = Role(name = ROLE_USER)
         if (!roleRepository.findByName(name = ROLE_USER).isPresent){
             roleRepository.save(roleUser)
-        }
-
-        val roleOrganization = Role(name = ROLE_ORGANIZATION)
-        if (!roleRepository.findByName(name = ROLE_ORGANIZATION).isPresent) {
-            roleRepository.save(roleOrganization)
         }
 
         val admin = User(

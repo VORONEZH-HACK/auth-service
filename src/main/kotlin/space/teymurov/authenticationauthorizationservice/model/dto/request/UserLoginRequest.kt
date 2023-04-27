@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import org.hibernate.validator.constraints.Length
 
-data class LoginRequest(
+data class UserLoginRequest(
     @field:NotBlank
     @field:Email
     @field:Length(min = 3, max = 20)
