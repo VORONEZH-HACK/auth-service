@@ -1,5 +1,7 @@
 package space.teymurov.authenticationauthorizationservice.controller
 
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -22,15 +24,17 @@ class OrganizationController(
         produces = ["application/json"],
         consumes = ["application/json"]
     )
-    fun register(@RequestBody registerRequest: OrganizationRegisterRequest): AbstractApiResponse<RegisterLoginResponse> {
-        return organizationService.register(organizationRequest = registerRequest)
+    fun register(@RequestBody registerRequest: OrganizationRegisterRequest): ResponseEntity<RegisterLoginResponse> {
+        val response = organizationService.register(organizationRequest = registerRequest)
+        return ResponseEntity<RegisterLoginResponse>(response.data, HttpStatusCode.valueOf(response.code))
     }
     @PatchMapping(
         value = ["login"],
         produces = ["application/json"],
         consumes = ["application/json"]
     )
-    fun login(@RequestBody loginRequest: OrganizationLoginRequest): AbstractApiResponse<RegisterLoginResponse> {
-        return organizationService.login(organizationRequest = loginRequest)
+    fun login(@RequestBody loginRequest: OrganizationLoginRequest): ResponseEntity<RegisterLoginResponse> {
+        val response = organizationService.login(organizationRequest = loginRequest)
+        return ResponseEntity<RegisterLoginResponse>(response.data, HttpStatusCode.valueOf(response.code))
     }
 }
