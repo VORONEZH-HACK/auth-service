@@ -6,5 +6,6 @@ import java.util.*
 class TokenResponse(
     val code: Int = HttpStatus.OK.value(),
     val token: UUID? = null,
-    val type: String? = null
+    val type: String? = null,
+    val user: UUID? = null
 )

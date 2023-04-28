@@ -86,7 +86,12 @@ class UserServiceImpl(
             if (!jwtTokenUtil.validateAccessToken(token))
                 throw AbstractException("token not valid!")
             else if (tokenID.isPresent)
-                TokenResponse(200, tokenID.get().id, claims["type"] as String)
+                TokenResponse(
+                    200,
+                    tokenID.get().id,
+                    type = claims["type"] as String,
+                    user = UUID.fromString(claims["user-uuid"] as String)
+                )
             else
                 TokenResponse(400)
         } catch (e: Exception) {

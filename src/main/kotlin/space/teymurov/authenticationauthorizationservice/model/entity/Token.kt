@@ -13,5 +13,5 @@ data class Token(
     val id: UUID = UUID.randomUUID(),
 
     @Column(name = "type", nullable = false)
-    val type: String
+    val type: String,
 )
