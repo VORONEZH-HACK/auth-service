@@ -37,8 +37,7 @@ class UserController(
 
     @PatchMapping(
         value = ["logout"],
-        produces = ["application/json"],
-        consumes = ["application/json"]
+        produces = ["application/json"]
     )
     fun logout(@RequestHeader("Access-Token") accessToken: String): AbstractApiResponse<String> {
         return userService.logout(accessToken)
@@ -46,8 +45,7 @@ class UserController(
 
     @GetMapping(
         value = ["token"],
-        produces = ["application/json"],
-        consumes = ["application/json"]
+        produces = ["application/json"]
     )
     fun token(@RequestHeader("Access-Token") accessToken: String): TokenResponse {
         return userService.token(accessToken)
